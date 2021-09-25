@@ -30,8 +30,8 @@ public class HistoryDto {
             int i = 1;
             for (History x : categories) {
                 if (x.getUserName().equals(userId)) {
-                    HistoryList.add(of(x));
                     x.setSeq(i);
+                    HistoryList.add(of(x));
                     // System.out.println("!!!!!!!!!!:::: " +);
                     i++;
                 }
@@ -43,7 +43,7 @@ public class HistoryDto {
     }
 
     public static HistoryDto of(History history) {
-        return HistoryDto.builder().id(history.getId()).userName(history.getUserName()).logDt(history.getLogDt())
-                .clientIp(history.getClientIp()).userAgent(history.getUserAgent()).build();
+        return HistoryDto.builder().seq(history.getSeq()).id(history.getId()).userName(history.getUserName())
+                .logDt(history.getLogDt()).clientIp(history.getClientIp()).userAgent(history.getUserAgent()).build();
     }
 }
