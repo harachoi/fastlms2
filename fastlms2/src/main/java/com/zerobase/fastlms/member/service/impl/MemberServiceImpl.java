@@ -1,8 +1,11 @@
 package com.zerobase.fastlms.member.service.impl;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.admin.entity.History;
+import com.zerobase.fastlms.admin.mapper.HistoryMapper;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
 import com.zerobase.fastlms.admin.model.MemberParam;
+import com.zerobase.fastlms.admin.repository.HistoryRepository;
 import com.zerobase.fastlms.components.MailComponents;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.exception.MemberNotEmailAuthException;
@@ -14,6 +17,8 @@ import com.zerobase.fastlms.member.service.MemberService;
 import com.zerobase.fastlms.util.RequestUtils;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.RequestEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -36,9 +41,11 @@ import javax.servlet.http.HttpServletRequest;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final HistoryRepository historyRepository;
     private final MailComponents mailComponents;
 
     private final MemberMapper memberMapper;
+    private final HistoryMapper historyMapper;
 
     private final HttpServletRequest request;
 
@@ -89,6 +96,7 @@ public class MemberServiceImpl implements MemberService {
         member.setUserStatus(Member.MEMBER_STATUS_ING);
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
+
         memberRepository.save(member);
 
         return true;
@@ -214,9 +222,20 @@ public class MemberServiceImpl implements MemberService {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
-        // userHistory
+        History history = new History();
+        history.setUserName(member.getUserId());
+
+        // System.out.println("id: " + member.getUserId() + " username: " +
+        // member.getUserName());
+        history.setLogDt(LocalDateTime.now());
+        history.setClientIp(RequestUtils.getClientIP(request));
+        history.setUserAgent(RequestUtils.getUserAgent(request));
+        historyRepository.save(history);
+        // userHistor
         member.setClientIp(RequestUtils.getClientIP(request));
         member.setUserAgent(RequestUtils.getUserAgent(request));
+        member.setLogDt(LocalDateTime.now());
+        memberRepository.save(member);
 
         System.out.println("11111" + member.getClientIp());
         System.out.println("2222: " + member.getUserAgent());
