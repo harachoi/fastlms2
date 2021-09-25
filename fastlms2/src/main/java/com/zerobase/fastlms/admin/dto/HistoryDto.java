@@ -32,7 +32,6 @@ public class HistoryDto {
                 if (x.getUserName().equals(userId)) {
                     x.setSeq(i);
                     HistoryList.add(of(x));
-                    // System.out.println("!!!!!!!!!!:::: " +);
                     i++;
                 }
             }

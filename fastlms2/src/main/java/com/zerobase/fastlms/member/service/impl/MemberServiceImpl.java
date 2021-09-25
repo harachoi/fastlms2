@@ -2,7 +2,6 @@ package com.zerobase.fastlms.member.service.impl;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.entity.History;
-import com.zerobase.fastlms.admin.mapper.HistoryMapper;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.admin.repository.HistoryRepository;
@@ -45,7 +44,6 @@ public class MemberServiceImpl implements MemberService {
     private final MailComponents mailComponents;
 
     private final MemberMapper memberMapper;
-    private final HistoryMapper historyMapper;
 
     private final HttpServletRequest request;
 
@@ -145,13 +143,10 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return list;
-
-        // return memberRepository.findAll();
     }
 
     @Override
     public MemberDto detail(String userId) {
-        // System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!! DETAIL: " + userId);
 
         Optional<Member> optionalMember = memberRepository.findById(userId);
         if (!optionalMember.isPresent()) {
@@ -225,8 +220,6 @@ public class MemberServiceImpl implements MemberService {
         History history = new History();
         history.setUserName(member.getUserId());
 
-        // System.out.println("id: " + member.getUserId() + " username: " +
-        // member.getUserName());
         history.setLogDt(LocalDateTime.now());
         history.setClientIp(RequestUtils.getClientIP(request));
         history.setUserAgent(RequestUtils.getUserAgent(request));
@@ -237,39 +230,6 @@ public class MemberServiceImpl implements MemberService {
         member.setLogDt(LocalDateTime.now());
         memberRepository.save(member);
 
-        System.out.println("11111" + member.getClientIp());
-        System.out.println("2222: " + member.getUserAgent());
-
-        // public String index(HttpServletRequest request) {
-
-        // String userAgent = RequestUtils.getUserAgent(request);
-        // String clientIp = RequestUtils.getClientIP(request);
-        // member.setClientIp(clientIp);
-
         return new User(member.getUserId(), member.getPassword(), grantedAuthorities);
     }
-
-    // @Override
-    // public boolean loginHistory(String username, String clientIp, String
-    // userAgent) {
-    // Optional<Member> optionalMember = memberRepository.findById(username);
-    // if (!optionalMember.isPresent()) {
-    // throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
-    // }
-
-    // Member member = optionalMember.get();
-    // member.setClientIp(clientIp);
-    // member.setUserAgent(userAgent);
-    // // Optional<Member> optionalMember =
-    // memberRepository.findByEmailAuthKey(uuid);
-    // // // if (!optionalMember.isPresent()) {
-    // // // return false;
-    // // // }
-
-    // // Member member = optionalMember.get();
-
-    // // member.setLogDt(LocalDateTime.now());
-
-    // return true;
-    // }
 }

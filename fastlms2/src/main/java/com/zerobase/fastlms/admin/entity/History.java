@@ -28,8 +28,4 @@ public class History {
     String userAgent;
     long seq;
 
-    // public static History of(History history) {
-    // return History.builder().seq(history.getSeq()).build();
-    // }
-
 }

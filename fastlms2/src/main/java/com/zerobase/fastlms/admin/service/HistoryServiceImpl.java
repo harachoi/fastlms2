@@ -22,13 +22,6 @@ public class HistoryServiceImpl implements HistoryService {
         return Sort.by(Sort.Direction.DESC, "logDt");
     }
 
-    // @Override
-    // public List<HistoryDto> list() {
-    // List<History> histories =
-    // historyRepository.findAll(getSortBySortValueDesc());
-    // return HistoryDto.of(histories);
-    // }
-
     @Override
     public List<HistoryDto> list(HistoryParam parameter, String userId) {
         List<History> histories = historyRepository.findAll(getSortBySortValueDesc());
